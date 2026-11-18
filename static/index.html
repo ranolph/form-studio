@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#171c1b">
+  <meta name="description" content="A local parametric design studio for pots, vases, bowls and lampshades. Shape, texture and export your own printable objects.">
+  <title>Form Studio</title>
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body data-mobile-panel="shape">
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+    <symbol id="i-library" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M4 3h13l4 4v14H3V3h1Zm3 0v7h10V3M7 21v-7h10v7"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 3h9v11H3V6Z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="m8 4-5 5 5 5M3 9h10a7 7 0 0 1 0 14" transform="translate(0 -2)"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 2 5 5-5 5m5-5h-10a7 7 0 0 0 0 14"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 9a9 9 0 1 1 0 6M4 3v6h6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M3 3h18v18H3V3Zm6 0v18m6-18v18M3 9h18M3 15h18"/></symbol>
+    <symbol id="i-wire" viewBox="0 0 24 24"><path d="m12 2 10 6v9l-10 5-10-5V8l10-6Zm0 0v20M2 8l20 9M22 8 2 17"/></symbol>
+    <symbol id="i-cut" viewBox="0 0 24 24"><path d="M12 2v20M8 4H4v16h4m8-16h4v16h-4" stroke-dasharray="3 3"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 5h3l12 14h3M3 19h3L18 5h3m-4-4 4 4-4 4m0 6 4 4-4 4"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 4 8 8-8 8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7m0-11v1"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  </defs></svg>
+
+  <header class="app-header">
+    <a class="brand" href="/" aria-label="Form Studio home"><img src="/icon.svg" alt="" width="29" height="29"><span>Form Studio</span></a>
+    <span class="header-divider"></span>
+    <div class="header-design"><input id="design-name" class="design-name" aria-label="Design name" maxlength="80" value="Coral vessel"><span id="dirty-indicator" title="Unsaved changes" aria-label="Unsaved changes"></span></div>
+    <div class="header-spacer"></div>
+    <button class="btn quiet" id="presets-open" aria-label="Starting forms"><svg><use href="#i-plus"/></svg><span>Starting forms</span></button>
+    <button class="btn quiet desktop-label" id="saved-open" aria-label="My designs"><svg><use href="#i-folder"/></svg><span>My designs</span></button>
+    <button class="btn icon-btn" id="settings-open" aria-label="Settings" title="Settings"><svg><use href="#i-settings"/></svg></button>
+    <span class="header-divider hide-mobile"></span>
+    <button class="btn quiet" id="save-design" aria-label="Save"><svg><use href="#i-save"/></svg><span>Save</span></button>
+    <button class="btn primary header-export" id="download-stl"><svg><use href="#i-download"/></svg><span>Download STL</span></button>
+  </header>
+
+  <main class="studio-layout">
+    <aside class="shape-panel floating-panel" aria-label="Shape and profile">
+      <div class="panel-heading"><h2>Form</h2><span class="small-muted">mm</span></div>
+      <div class="shape-scroll" id="shape-controls"></div>
+    </aside>
+
+    <section class="stage-panel" aria-label="3D model preview">
+      <div class="stage-heading">
+        <div class="stage-label"><span id="design-category">VESSEL</span><span id="connection-status" class="connection-status" title="Checking the local server"><span></span><span>Connecting</span></span></div>
+        <div class="stage-actions">
+          <div class="randomise-controls" id="randomise-controls">
+            <div class="randomise-buttons"><button class="btn randomise-btn" id="randomize" aria-label="Randomise design" title="Generate a new editable design"><svg><use href="#i-shuffle"/></svg><span>Randomise</span></button><button class="btn randomise-options-toggle" id="randomise-options-toggle" aria-label="Randomise options" aria-expanded="false" aria-controls="randomise-options" title="Randomise options"><svg><use href="#i-chevron"/></svg></button></div>
+            <section class="randomise-options" id="randomise-options" aria-label="Randomise options" hidden>
+              <label class="field-label" for="randomise-kind">Make a random</label>
+              <select class="select-input" id="randomise-kind"><option value="any">Any object</option><option value="vase">Vase</option><option value="planter">Plant pot</option><option value="bowl">Bowl / tray</option><option value="lampshade">Lampshade</option><option value="container">Desk pot</option></select>
+              <label class="randomise-size-lock"><input type="checkbox" id="randomise-keep-size"><span>Keep height &amp; body diameter</span></label>
+              <p class="field-help">Changes the form and surface. Relief can change the overall width. Undo brings back your previous design.</p>
+            </section>
+          </div>
+          <div class="history-controls"><button class="btn icon-btn" id="undo" title="Undo (Ctrl+Z)" aria-label="Undo" disabled><svg><use href="#i-undo"/></svg></button><button class="btn icon-btn" id="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled><svg><use href="#i-redo"/></svg></button></div>
+        </div>
+      </div>
+      <div id="viewport" class="viewport" aria-label="Drag to rotate the 3D model; scroll or pinch to zoom">
+        <div class="viewport-loading" id="viewport-loading"><span class="spinner"></span><span>Updating model…</span></div>
+        <div id="mesh-error" class="mesh-error" role="alert" hidden></div>
+        <div class="viewport-top-tools">
+          <label class="preview-detail-label">Mesh <select id="preview-detail" aria-label="Preview mesh detail"><option value="draft">Draft</option><option value="preview" selected>Standard</option><option value="detail">Detailed</option></select></label>
+          <div class="camera-tools"><button class="btn icon-btn" id="reset-view" aria-label="Reset camera" title="Reset camera"><svg><use href="#i-reset"/></svg></button><button class="btn icon-btn" id="toggle-grid" aria-label="Show print bed" aria-pressed="false" title="Print bed"><svg><use href="#i-grid"/></svg></button><button class="btn icon-btn" id="toggle-cut" aria-label="Section view" aria-pressed="false" title="Section view"><svg><use href="#i-cut"/></svg></button></div>
+        </div>
+        <div id="paint-toolbar" class="paint-toolbar" hidden><span>Painting selected effect</span><button class="btn quiet" id="paint-erase-overlay" aria-pressed="false">Erase</button><button class="btn primary" id="paint-done">Done</button></div>
+        <div class="viewport-bottom-tools">
+          <div class="display-modes" role="group" aria-label="Model appearance"><button data-display-mode="solid">Solid</button><button class="active" data-display-mode="layers">Layer lines</button><button data-display-mode="wire">Wire</button><span class="toolbar-separator"></span><button id="toggle-gradient" class="gradient-button active" aria-label="Height colour gradient" aria-pressed="true" title="Height colour gradient"><span></span></button></div>
+          <div class="color-palette" role="group" aria-label="Preview colour"></div>
+        </div>
+        <div class="view-hint">Drag to orbit · Scroll to zoom</div>
+      </div>
+      <div class="model-summary">
+        <div class="summary-item"><span class="eyebrow" id="size-label">PREVIEW SIZE</span><strong id="dimensions">—</strong><span class="small-muted">Width × depth × height</span></div>
+        <div class="summary-item"><span class="eyebrow">MATERIAL VOLUME</span><strong id="volume">—</strong><span class="small-muted" id="triangle-count">Calculating mesh</span></div>
+        <div class="summary-item bed-summary"><span class="eyebrow" id="build-volume-label">BUILD VOLUME</span><strong class="bed-status" id="bed-status">Checking size</strong><span class="small-muted">Allow room for a brim</span></div>
+      </div>
+      <div id="size-warning" class="size-warning" role="status" hidden></div>
+      <div class="stage-bottom"><span id="mesh-status"><span class="status-dot"></span>Building preview</span><button class="text-btn" id="recipe-export">Export recipe <svg><use href="#i-arrow"/></svg></button></div>
+    </section>
+
+    <nav class="mobile-panel-nav" aria-label="Design panels"><button class="active" data-mobile-panel="shape">Form</button><button data-mobile-panel="surface">Surface</button><button data-mobile-panel="build">Build</button></nav>
+
+    <aside class="inspector-panel floating-panel" aria-label="Surface and build controls">
+      <div class="inspector-heading"><div class="inspector-tabs" role="tablist" aria-label="Control sections"><button class="active" data-tab="surface" role="tab" aria-selected="true">Surface</button><button data-tab="build" role="tab" aria-selected="false">Build</button></div></div>
+      <div class="inspector-scroll" id="inspector-controls"><div class="control-tab active" id="tab-surface" role="tabpanel"></div><div class="control-tab" id="tab-build" role="tabpanel" hidden></div></div>
+    </aside>
+    <section class="export-panel floating-panel" aria-label="Export design">
+      <div class="quality-row"><label for="export-quality">STL detail</label><select id="export-quality"><option value="standard">Standard</option><option value="fine" selected>Fine</option><option value="ultra">Ultra</option></select></div>
+      <button class="btn library-btn" id="send-library" disabled title="Add a Layer Library address in Settings to enable this."><svg><use href="#i-library"/></svg><span>Send to Layer Library</span><svg class="arrow-icon"><use href="#i-arrow"/></svg></button>
+      <button class="btn primary mobile-export" id="download-stl-mobile"><svg><use href="#i-download"/></svg>Download STL</button>
+      <p class="export-note">STL in millimetres · Colour and layer lines are preview only</p>
+    </section>
+  </main>
+
+  <dialog id="presets-dialog" class="modal presets-modal"><div class="modal-top"><div><div class="eyebrow">START A DESIGN</div><h2>Starting forms</h2></div><button class="btn icon-btn" data-close aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div class="preset-panel"><div class="panel-heading"><span class="field-help">Choose a starting point, then edit every part.</span><span class="small-muted" id="preset-count"></span></div><div class="category-filter" role="group" aria-label="Filter starting designs"><button class="active" data-category="all">All</button><button data-category="planter">Pots</button><button data-category="vase">Vases</button><button data-category="lampshade">Shades</button><button data-category="bowl">Bowls & more</button></div><div id="preset-list" class="preset-list"></div></div></dialog>
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+  <dialog id="saved-dialog" class="modal saved-modal"><div class="modal-top"><div><div class="eyebrow">YOUR COLLECTION</div><h2 id="saved-dialog-title">My designs</h2></div><button class="btn icon-btn" data-close aria-label="Close"><svg><use href="#i-close"/></svg></button></div><div class="saved-view-tabs" role="tablist" aria-label="Saved design folders"><button class="active" id="saved-view-designs" data-saved-view="designs" role="tab" aria-selected="true" aria-controls="saved-list">My designs</button><button id="saved-view-trash" data-saved-view="trash" role="tab" aria-selected="false" aria-controls="saved-list">Trash</button></div><div class="saved-actions"><p id="saved-dialog-help">Reopen a design to keep shaping it.</p><label class="btn quiet import-label"><svg><use href="#i-upload"/></svg>Import recipe<input type="file" id="recipe-import" accept=".json,application/json" hidden></label></div><div id="saved-list" class="saved-list" role="tabpanel" aria-labelledby="saved-view-designs"></div></dialog>
+  <dialog id="settings-dialog" class="modal settings-modal"><div class="modal-top"><div><div class="eyebrow">LOCAL CONNECTION</div><h2>Studio settings</h2></div><button class="btn icon-btn" data-close aria-label="Close"><svg><use href="#i-close"/></svg></button></div><label class="field-label" for="library-url">Layer Library address</label><input type="url" id="library-url" class="text-input" placeholder="http://your-nas:8777"><p class="field-help">The address of your existing Layer Library on your home network. Models are sent from this server.</p><div class="settings-actions"><button class="btn secondary" id="test-library">Test connection</button><button class="btn primary" id="save-settings">Save settings</button></div><p id="settings-status" class="field-help" role="status"></p><hr><div class="display-settings"><h3>Preview appearance</h3><label class="field-label" for="layer-height">Layer line spacing</label><div class="settings-inline"><input id="layer-height" type="number" min="0.1" max="2" step="0.05" value="0.6" class="text-input"><span>mm</span></div><p class="field-help">Visual layer lines only. They do not change the STL or set your slicer layer height.</p><label class="field-label" for="render-quality">Preview sharpness</label><select id="render-quality" class="select-input"><option value="balanced">Balanced</option><option value="high" selected>High</option><option value="ultra">Ultra</option></select></div><hr><div class="settings-info"><p>Configured build volume: <span id="printer-volume">256 × 256 × 256 mm</span></p><strong>Form Studio <span id="app-version">1.2.0</span></strong><p>Your designs stay on your server. A working draft is also remembered in this browser.</p><p>Preview colours do not change the exported STL. Final print settings and placement belong in your slicer.</p></div></dialog>
+  <dialog id="confirm-dialog" class="modal confirm-modal"><div class="modal-top"><h2 id="confirm-title">Replace current design?</h2><button class="btn icon-btn" data-close aria-label="Close"><svg><use href="#i-close"/></svg></button></div><p id="confirm-message"></p><div class="settings-actions"><button class="btn secondary" id="confirm-cancel">Cancel</button><button class="btn primary" id="confirm-accept">Continue</button></div></dialog>
+  <input type="file" id="hidden-recipe-import" accept=".json,application/json" hidden>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
