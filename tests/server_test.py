@@ -1,4 +1,5 @@
 """Focused integration tests for persistence, exports and request boundaries."""
+from contextlib import contextmanager
 from pathlib import Path
 import base64
 import http.client
@@ -148,6 +149,80 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(self.request("POST", "/api/designs/" + design["id"] + "/restore")[0], 200)
         restarted = server.Store(self.store.path)
         self.assertEqual(restarted.config()["layerLibraryUrl"], self.store.config()["layerLibraryUrl"])
+
+    def assert_design_mutation_waits_for_commit(self, restore):
+        design = self.store.save_design({"name": "Commit boundary", "params": {"height": 100}})
+        if restore:
+            with self.store.db() as db:
+                db.execute("UPDATE designs SET deleted_at=? WHERE id=?", (server.now(), design["id"]))
+        method = "POST" if restore else "DELETE"
+        path = "/api/designs/" + design["id"] + ("/restore" if restore else "")
+        commit_ready, allow_commit, committed = (threading.Event() for _ in range(3))
+        response_sent, request_done = threading.Event(), threading.Event()
+        responses, errors, response_commit_states = [], [], []
+        original_db, original_send = self.store.db, server.Handler.send
+
+        @contextmanager
+        def gated_db():
+            writing = False
+            with original_db() as db:
+                yield db
+                if db.in_transaction:
+                    writing = True
+                    commit_ready.set()
+                    if not allow_commit.wait(5):
+                        raise TimeoutError("The test did not release the commit gate")
+            if writing:
+                committed.set()
+
+        def observe_send(handler, status, payload, *args, **kwargs):
+            if handler.server is self.app and handler.command == method and handler.path == path:
+                response_commit_states.append(committed.is_set())
+                result = original_send(handler, status, payload, *args, **kwargs)
+                response_sent.set()
+                return result
+            return original_send(handler, status, payload, *args, **kwargs)
+
+        def mutate():
+            try:
+                responses.append(self.request(method, path))
+            except Exception as error:
+                errors.append(error)
+            finally:
+                request_done.set()
+
+        with patch.object(self.store, "db", gated_db), patch.object(server.Handler, "send", observe_send):
+            client = threading.Thread(target=mutate, daemon=True)
+            client.start()
+            try:
+                self.assertTrue(commit_ready.wait(5), "The mutation did not reach its commit boundary")
+                # A separate HTTP reader still sees the previously committed state.
+                active = self.request("GET", "/api/designs")[1]["designs"]
+                self.assertEqual([row["id"] for row in active], [] if restore else [design["id"]])
+                # In the old handler send() completes before this gate is reached,
+                # so this fails regardless of when the client thread is scheduled.
+                self.assertFalse(response_sent.is_set(), f"{method} success was sent before its database commit")
+                self.assertFalse(request_done.is_set(), "The mutation returned while its commit was blocked")
+            finally:
+                allow_commit.set()
+                client.join(5)
+                committed.wait(5)
+            self.assertFalse(client.is_alive(), "The mutation request did not finish")
+            self.assertEqual(errors, [])
+            self.assertTrue(committed.is_set())
+            self.assertTrue(response_sent.wait(5))
+            self.assertEqual(response_commit_states, [True])
+            self.assertEqual(responses, [(200, {"ok": True})])
+        active = self.request("GET", "/api/designs")[1]["designs"]
+        trash = self.request("GET", "/api/trash")[1]["designs"]
+        self.assertEqual([row["id"] for row in active], [design["id"]] if restore else [])
+        self.assertEqual([row["id"] for row in trash], [] if restore else [design["id"]])
+
+    def test_delete_waits_for_commit_before_success(self):
+        self.assert_design_mutation_waits_for_commit(restore=False)
+
+    def test_restore_waits_for_commit_before_success(self):
+        self.assert_design_mutation_waits_for_commit(restore=True)
 
     def test_export_cookie_csrf_multipart_metadata_idempotence(self):
         request_id = str(uuid.uuid4())

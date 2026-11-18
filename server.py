@@ -652,18 +652,22 @@ class Handler(BaseHTTPRequestHandler):
         match = re.fullmatch(r"/api/designs/([^/]+)(/restore)?", route)
         if match:
             design_id = valid_id(match[1])
+            payload = None
             with store.db() as db:
                 row = db.execute("SELECT * FROM designs WHERE id=?", (design_id,)).fetchone()
                 if not row or (row["deleted_at"] and not match[2]):
                     raise APIError(404, "Design not found.")
                 if method == "GET" and not match[2]:
-                    return self.send(200, {"design": store.design(row)})
-                if method == "DELETE" and not match[2]:
+                    payload = {"design": store.design(row)}
+                elif method == "DELETE" and not match[2]:
                     db.execute("UPDATE designs SET deleted_at=?,updated_at=? WHERE id=?", (now(), now(), design_id))
-                    return self.send(200, {"ok": True})
-                if method == "POST" and match[2]:
+                    payload = {"ok": True}
+                elif method == "POST" and match[2]:
                     db.execute("UPDATE designs SET deleted_at=NULL,updated_at=? WHERE id=?", (now(), design_id))
-                    return self.send(200, {"ok": True})
+                    payload = {"ok": True}
+            # A success response must not become visible before the commit.
+            if payload is not None:
+                return self.send(200, payload)
         if method == "GET" and route == "/api/trash":
             with store.db() as db:
                 rows = db.execute("SELECT * FROM designs WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC").fetchall()
