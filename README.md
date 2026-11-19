@@ -23,6 +23,34 @@ Shape a vessel, layer patterns over its surface, paint where each effect appears
 
 There are no cloud accounts, external fonts or runtime CDN dependencies. Three.js is bundled locally. The server uses Python's standard library and SQLite; it does not need a GPU. Preview performance depends on the computer running the browser.
 
+## Screenshots
+
+### Design workspace
+
+![Form Studio workspace with a 3D vase preview, form controls, surface effects and the GitHub footer link](docs/screenshots/form-studio-workspace.jpg)
+
+Shape a vessel, edit layered effects and inspect the live 3D preview.
+
+### Starting forms
+
+![Form Studio's Starting forms gallery with editable pots, vases, bowls and lampshades](docs/screenshots/form-studio-starting-forms.jpg)
+
+Choose a starting design, then adjust its form, surface and print details.
+
+## Hardware compatibility
+
+The intended hosts are 64-bit Intel/AMD and ARM64 systems with a supported
+Docker/Python environment. This includes suitable Linux PCs, NAS systems and
+single-board computers; supported Windows and Mac machines can use Docker
+Desktop with Linux containers. A server GPU is not required. Phones and tablets
+can use the browser interface of a separately hosted installation.
+
+Linux x86_64 application checks passed. ARM64 image/dependency availability was
+checked, but ARM runtime, Windows/macOS and live Docker/TrueNAS deployment were
+not executed here. Read [hardware and platform compatibility](docs/hardware.md)
+for browser requirements and the precise verification scope. GitHub Actions
+includes separate AMD64 and ARM64 container jobs.
+
 ## Quick start with Docker Compose
 
 Install Docker Engine with Compose v2, then download or clone this repository and open a terminal in its top-level folder:

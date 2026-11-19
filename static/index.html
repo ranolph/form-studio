@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#171c1b">
+  <meta name="theme-color" content="#f3f1ed">
+  <meta name="application-name" content="Form Studio">
   <meta name="description" content="A local parametric design studio for pots, vases, bowls and lampshades. Shape, texture and export your own printable objects.">
   <title>Form Studio</title>
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/icon.svg?v=20261119-brand" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css?v=20261119-brand">
 </head>
 <body data-mobile-panel="shape">
   <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -34,7 +35,7 @@
   </defs></svg>
 
   <header class="app-header">
-    <a class="brand" href="/" aria-label="Form Studio home"><img src="/icon.svg" alt="" width="29" height="29"><span>Form Studio</span></a>
+    <a class="brand" href="/" aria-label="Form Studio home"><img src="/icon.svg?v=20261119-brand" alt="" width="37" height="37"><span>Form <b>Studio</b></span></a>
     <span class="header-divider"></span>
     <div class="header-design"><input id="design-name" class="design-name" aria-label="Design name" maxlength="80" value="Coral vessel"><span id="dirty-indicator" title="Unsaved changes" aria-label="Unsaved changes"></span></div>
     <div class="header-spacer"></div>
@@ -88,7 +89,7 @@
         <div class="summary-item bed-summary"><span class="eyebrow" id="build-volume-label">BUILD VOLUME</span><strong class="bed-status" id="bed-status">Checking size</strong><span class="small-muted">Allow room for a brim</span></div>
       </div>
       <div id="size-warning" class="size-warning" role="status" hidden></div>
-      <div class="stage-bottom"><span id="mesh-status"><span class="status-dot"></span>Building preview</span><button class="text-btn" id="recipe-export">Export recipe <svg><use href="#i-arrow"/></svg></button></div>
+      <footer class="stage-bottom"><span id="mesh-status"><span class="status-dot"></span>Building preview</span><a class="stage-github" href="https://github.com/ranolph" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile for ranolph">GitHub · ranolph</a><button class="text-btn" id="recipe-export">Export recipe <svg><use href="#i-arrow"/></svg></button></footer>
     </section>
 
     <nav class="mobile-panel-nav" aria-label="Design panels"><button class="active" data-mobile-panel="shape">Form</button><button data-mobile-panel="surface">Surface</button><button data-mobile-panel="build">Build</button></nav>

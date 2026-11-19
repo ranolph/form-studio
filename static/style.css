@@ -33,3 +33,18 @@
 @media(max-width:1200px) and (min-width:861px){.stage-actions{gap:4px}.stage-heading{gap:6px}.randomise-buttons .btn{font-size:10px;padding:5px 7px}.randomise-buttons .randomise-options-toggle{padding:5px;min-width:23px}.stage-label{font-size:8px}}
 @media(max-width:860px){.stage-actions{gap:7px}.stage-heading{padding-top:10px;padding-bottom:6px;min-height:47px}.randomise-buttons .btn{font-size:11px;min-height:31px;padding:6px 9px}.randomise-buttons .randomise-options-toggle{padding:6px;min-width:26px}.randomise-options{width:245px}.randomise-options .field-label{font-size:12px}}
 @media(max-width:370px){.stage-actions{gap:3px}.randomise-buttons .btn{font-size:10px;padding:5px 7px}.randomise-buttons .randomise-options-toggle{padding:5px;min-width:23px}.stage-label{font-size:7px}}
+
+/* Shared Studio branding: dark badge, sculptural colour and a compact wordmark. */
+.app-header{border-radius:16px;background:#fcfbf9;border-color:#ffffffbf;box-shadow:0 4px 14px #393e2905}
+.brand{gap:10px;font-size:21px;font-weight:660;letter-spacing:-.8px;flex-shrink:0}
+.brand>span{font-size:inherit}
+.brand b{font-weight:440}
+.brand img{width:37px;height:37px;flex-shrink:0}
+.stage-bottom{flex-wrap:wrap;gap:8px 12px}
+.stage-github{display:inline-flex;align-items:center;min-height:28px;font-size:12px;font-weight:550;color:#65784f;text-decoration:underline;text-decoration-color:#a5b293;text-underline-offset:4px;white-space:nowrap}
+.stage-github:hover{color:#343d38;text-decoration-color:currentColor}
+.stage-github:focus-visible{outline:2px solid #65784f;outline-offset:4px;border-radius:3px}
+@media(max-width:1200px){.brand{font-size:19px}.brand img{width:33px;height:33px}.stage-bottom{gap:6px 10px}.stage-github{font-size:11px}}
+@media(max-width:860px){.brand{font-size:18px;gap:8px}.brand img{width:32px;height:32px}.stage-bottom{padding-top:6px;padding-bottom:6px}.stage-github{font-size:12px;min-height:44px}}
+@media(max-width:500px){.brand{font-size:17px;gap:7px}.brand img{width:30px;height:30px}.header-design{min-width:0;flex:1 1 70px}.header-design .design-name{width:100%}.stage-bottom{gap:4px 8px}.stage-github{font-size:11px}}
+@media(max-width:370px){.brand{font-size:16px}.brand img{width:28px;height:28px}}
