@@ -18,6 +18,7 @@ Shape a vessel, layer patterns over its surface, paint where each effect appears
 - **Randomise:** generate a vase, plant pot, bowl, lampshade or desk pot; optionally keep the current height and body diameter. Generated designs stay fully editable.
 - **Print-oriented details:** hollow walls, closed or open bases, drainage or mounting holes, slots and diamond openings, millimetre dimensions and a configurable build-volume check.
 - **Clear previews:** orbit, zoom, section view, print-bed overlay, bright gradient or solid colours, visual layer lines and adjustable preview sharpness. A software renderer provides a fallback when WebGL is unavailable.
+- **A clean interface:** white panels and cards, neutral controls and graphite text on a pale pink page background. Small selected controls use a subtle pink accent. On mobile, the GitHub link sits below all design and export controls.
 - **Local persistence:** saved designs, recoverable trash, browser working drafts, Undo/Redo and portable `.form.json` recipes.
 - **Exports:** binary STL at three detail levels and an optional direct connection to Layer Library.
 
@@ -25,17 +26,27 @@ There are no cloud accounts, external fonts or runtime CDN dependencies. Three.j
 
 ## Screenshots
 
+### Clean interface — 2026-11-20 v3
+
+The page keeps its pale pink background, while the header, main panels, menus, dialogs and cards are white. Controls use neutral borders and text; the primary actions are graphite. Model colours remain independent of the interface theme.
+
 ### Design workspace
 
-![Form Studio workspace with a 3D vase preview, form controls, surface effects and the GitHub footer link](docs/screenshots/form-studio-workspace.jpg)
+![Form Studio with white control panels, neutral buttons and a 3D vase on a pale pink background](docs/screenshots/form-studio-workspace.jpg)
 
 Shape a vessel, edit layered effects and inspect the live 3D preview.
 
 ### Starting forms
 
-![Form Studio's Starting forms gallery with editable pots, vases, bowls and lampshades](docs/screenshots/form-studio-starting-forms.jpg)
+![Form Studio's white Starting forms gallery with editable pots, vases, bowls and lampshades](docs/screenshots/form-studio-starting-forms.jpg)
 
 Choose a starting design, then adjust its form, surface and print details.
+
+### Mobile controls and footer
+
+<img src="docs/screenshots/form-studio-mobile.jpg" width="390" alt="Form Studio on mobile with white panels, neutral design controls and the GitHub link below the export controls">
+
+Switch between Form, Surface and Build, then scroll past the export controls to reach the GitHub link at the bottom of the page.
 
 ## Hardware compatibility
 
